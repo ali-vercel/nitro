@@ -40,7 +40,7 @@ Nitro checks these sources, in order, to pick the runtime of the server function
 3. `bunVersion` in `vercel.json`.
 4. The runtime running the build: Bun when building with Bun, otherwise the build's Node.js major version, clamped to the versions Vercel supports.
 
-Vercel supports Node.js 22, 24, and every version from 26. A build on a supported version uses it for the function, including versions newer than `26`. A build on Node.js 23 or 25 uses the next supported version.
+Vercel supports Node.js 22, 24, and 26. A build on Node.js 23 or 25 uses the next supported version, and a build on a newer version uses `26`.
 
 Steps 2 and 3 follow the same precedence as Vercel.
 
