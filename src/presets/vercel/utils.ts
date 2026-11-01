@@ -17,9 +17,8 @@ import { ISR_URL_PARAM } from "./runtime/consts";
 // https://vercel.com/docs/build-output-api/configuration
 
 // https://vercel.com/docs/functions/runtimes/node-js/node-js-versions
-// Vercel supports Node.js 20, 22, 24, and every major from 26 onwards.
-const SUPPORTED_NODE_VERSIONS = [20, 22, 24];
-const FIRST_CONSECUTIVE_NODE_VERSION = 26;
+// https://github.com/vercel/vercel/blob/main/packages/build-utils/src/fs/node-version.ts
+const SUPPORTED_NODE_VERSIONS = [22, 24, 26];
 
 const FALLBACK_ROUTE = "/__fallback";
 
@@ -44,13 +43,9 @@ function getSystemNodeVersion() {
 export function resolveNodeRuntime(
   systemNodeVersion = getSystemNodeVersion()
 ): `nodejs${number}.x` {
-  if (systemNodeVersion >= FIRST_CONSECUTIVE_NODE_VERSION) {
-    return `nodejs${systemNodeVersion}.x`;
-  }
-  // Older majors without a Vercel runtime use the next supported one.
   const usedNodeVersion =
     SUPPORTED_NODE_VERSIONS.find((version) => version >= systemNodeVersion) ??
-    FIRST_CONSECUTIVE_NODE_VERSION;
+    SUPPORTED_NODE_VERSIONS.at(-1)!;
   return `nodejs${usedNodeVersion}.x`;
 }
 

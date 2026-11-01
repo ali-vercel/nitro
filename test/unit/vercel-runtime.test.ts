@@ -3,15 +3,9 @@ import { resolveNodeRuntime } from "../../src/presets/vercel/utils";
 
 describe("vercel: resolveNodeRuntime", () => {
   it.each([
-    [20, "nodejs20.x"],
     [22, "nodejs22.x"],
     [24, "nodejs24.x"],
     [26, "nodejs26.x"],
-    // Future majors need no code change
-    [27, "nodejs27.x"],
-    [28, "nodejs28.x"],
-    [29, "nodejs29.x"],
-    [30, "nodejs30.x"],
   ])(
     "uses the runtime of a supported Node.js major (%s)",
     (major, expected) => {
@@ -27,8 +21,12 @@ describe("vercel: resolveNodeRuntime", () => {
     expect(resolveNodeRuntime(major)).toBe(expected);
   });
 
-  it.each([16, 18, 19])("uses the oldest runtime for Node.js %s", (major) => {
-    expect(resolveNodeRuntime(major)).toBe("nodejs20.x");
+  it.each([16, 18, 20])("uses the oldest runtime for Node.js %s", (major) => {
+    expect(resolveNodeRuntime(major)).toBe("nodejs22.x");
+  });
+
+  it.each([27, 28, 30])("uses the newest runtime for Node.js %s", (major) => {
+    expect(resolveNodeRuntime(major)).toBe("nodejs26.x");
   });
 
   it("detects the Node.js major of the running process", () => {
